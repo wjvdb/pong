@@ -170,6 +170,74 @@ char *USART_itoa(int16_t i, char *p)
   return(p);
 }
 
+void moveDot(vdirection *vdir,hdirection *hdir,uint8_t *ver,uint8_t *hor)
+{
+	if(*ver> 8)
+	{
+		*vdir = down;
+	}
+	if(*ver< 1)
+	{
+		*vdir = up;
+	}
+	if(*hor>=7)
+	{
+		*hdir = right;
+	}
+	if(*hor< 1)
+	{
+		*hdir = left;
+	}
+	if(*hdir)
+	{
+		*hor = *hor-1;
+	}else
+	{
+		*hor = *hor+1;
+	}
+	if(*vdir)
+	{
+		*ver = *ver-1;
+	}else
+	{
+		*ver = *ver+1;
+	}
+}
+
+void write_matrix (uint8_t byte)
+{
+	int i;
+
+	for (i=1;i<=MAX_DIGITS;i++)
+	{
+		GPIO_ResetBits(GPIOA, CLK_PIN); 						// pull the clock pin low
+		
+		GPIO_WriteBit (GPIOA, DIN_PIN, byte&0x80);  // write the MSB bit to the data pin
+		byte = byte<<1;  														// shift left
+		
+		GPIO_SetBits(GPIOA, CLK_PIN); 							// pull the clock pin HIGH
+	}
+}
+
+void write_frame (uint8_t address, uint8_t data)
+{
+	GPIO_ResetBits(GPIOA, CS_PIN); // pull the CS pin LOW
+	
+	write_matrix (address);
+	write_matrix (data); 
+	
+	GPIO_SetBits(GPIOA, CS_PIN); // pull the CS pin HIGH
+}
+
+void max_init(void)
+{
+ write_frame(0x09, 0x00);      
+ write_frame(0x0a, 0x0f);       
+ write_frame(0x0b, 0x07);         
+ write_frame(0x0c, 0x01);       
+ write_frame(0x0f, 0x00);       
+}
+
 
 void Delay(__IO uint32_t nTime)
 { 

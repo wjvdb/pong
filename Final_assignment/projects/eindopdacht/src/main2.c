@@ -21,16 +21,7 @@
 #define AMOUNT_OF_FRAMES (1)										//contains amount of frames of the whole animation
 #define MAX_DIGITS (8)													//amount of rows per frame
 
-typedef enum 
-{
-	left,
-	right
-}hdirection;
-typedef enum 
-{
-	up,
-	down
-}vdirection;
+
 
 // ----------------------------------------------------------------------------
 // Function prototypes
@@ -44,8 +35,15 @@ void init_GPIO(void);
 void init_main(void);
 void init_ADC(void);
 void init_interrupt_timer2(void);
+void init_interrupt_timer3(void);
+void init_Timer14(void);
+void init_interrupt_timer14(void);
 void GPIO_SPI_init(void);
 void SPI_init(void);
+void init_gpio_button(void);
+void init_interrupt_button(void);
+void init_nvic_button(void);
+void init_button(void);
 
 void write_matrix (uint8_t byte);
 void write_frame (uint8_t address, uint8_t data);
@@ -72,14 +70,16 @@ void init_main(void)
 	init_Timer2();
 	init_interrupt_timer2();
 	init_Timer3();
+	init_interrupt_timer3();
+
 	init_ADC();
-	
+	init_button();
   // Configure LED3 and LED4 on STM32F0-Discovery
   STM_EVAL_LEDInit(LED3);
   STM_EVAL_LEDInit(LED4);
   
   // Initialize User Button on STM32F0-Discovery
-  STM_EVAL_PBInit(BUTTON_USER, BUTTON_MODE_GPIO);
+ // STM_EVAL_PBInit(BUTTON_USER, BUTTON_MODE_GPIO);
   
   USART_Setup();
   USART_Clearscreen();
@@ -175,32 +175,42 @@ void GPIO_SPI_init(void)
 
 void init_Timer3(void)
 {
-  TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_OCInitTypeDef       TIM_OCInitStructure;
-  
-
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-  
-  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-  TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
-
-	TIM_TimeBaseStructure.TIM_Period        = 250 - 1;
-  TIM_TimeBaseStructure.TIM_Prescaler     = 192-1;
-  TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+ 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef TIM_OCInitStructure;
 	
-	TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM1;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_Pulse       = 50;
-  TIM_OCInitStructure.TIM_OCPolarity  = TIM_OCPolarity_High;
+	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
 	
-  
-  TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
 
-  //(#) Call the TIM_Cmd(ENABLE) function to enable the TIM counter.
- 
-	TIM_OC2Init(TIM3, &TIM_OCInitStructure);
+	TIM_TimeBaseStructure.TIM_ClockDivision		= TIM_CKD_DIV1;
+	TIM_TimeBaseStructure.TIM_CounterMode		= TIM_CounterMode_Up;
+	TIM_TimeBaseStructure.TIM_Period				= 5999;
+	TIM_TimeBaseStructure.TIM_Prescaler			= 0;
+	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseStructure);
 	
-	TIM_Cmd(TIM3, DISABLE);	
+	// Timer 3 Output Compare
+	TIM_OCInitStructure.TIM_OCMode			= TIM_OCMode_Toggle;
+	TIM_OCInitStructure.TIM_OutputState		= TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse			= 0;
+	TIM_OCInitStructure.TIM_OCPolarity		= TIM_OCPolarity_High;
+	TIM_OC3Init(TIM3, &TIM_OCInitStructure);
+	
+	TIM_Cmd(TIM3,ENABLE);
+}
+
+void init_interrupt_timer3(void)
+{
+	NVIC_InitTypeDef initNvic;
+
+	initNvic.NVIC_IRQChannel			= TIM3_IRQn;
+	initNvic.NVIC_IRQChannelPriority	= 1;
+	initNvic.NVIC_IRQChannelCmd			= ENABLE;
+	
+	NVIC_Init(&initNvic); 
+	
+	TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+
+	TIM_Cmd(TIM3, ENABLE);
 }
 
 void init_DMA(void)
@@ -251,7 +261,7 @@ void init_Timer2(void)
 	//
 	//
 	// ----------------------------------------------------------------------------
-	TIM_TimeBaseStructure.TIM_Period        = 3500 - 1;
+	TIM_TimeBaseStructure.TIM_Period        = 7500 - 1;
   TIM_TimeBaseStructure.TIM_Prescaler     = 1372 - 1;
   TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 }
@@ -272,6 +282,59 @@ void init_interrupt_timer2(void)
 	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 
 	TIM_Cmd(TIM2, ENABLE);	
+}
+
+
+
+
+
+void init_button(void)
+{
+	init_gpio_button();
+	init_interrupt_button();
+	init_nvic_button();
+}
+
+void init_gpio_button(void)
+{
+	GPIO_InitTypeDef GPIO_initstructure;
+	
+	// Connect USER button to EXTI line with interrupt generation capability
+  // Enable the BUTTON clock
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+
+  // Configure button pin as input
+  GPIO_initstructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_initstructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_initstructure.GPIO_Pin = GPIO_Pin_0;
+  GPIO_Init(GPIOA, &GPIO_initstructure);
+}
+
+void init_interrupt_button(void)
+{
+	EXTI_InitTypeDef EXTI_initstructure;
+	
+	// connect Button EXTI line to Button GPIO Pin
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource0);
+  
+  // configure Button EXTI line
+  EXTI_initstructure.EXTI_Line = EXTI_Line0;
+  EXTI_initstructure.EXTI_Mode = EXTI_Mode_Interrupt;
+  EXTI_initstructure.EXTI_Trigger = EXTI_Trigger_Falling;
+  EXTI_initstructure.EXTI_LineCmd = ENABLE;
+  EXTI_Init(&EXTI_initstructure);
+}
+
+void init_nvic_button(void)
+{
+		NVIC_InitTypeDef NVIC_initstructure;
+	
+	 // configure button interrupt
+  NVIC_initstructure.NVIC_IRQChannel = EXTI0_1_IRQn;
+  NVIC_initstructure.NVIC_IRQChannelPriority = 3;
+  NVIC_initstructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_initstructure); 
 }
 
 
@@ -330,24 +393,20 @@ max_init();
     USART_itoa(verticalpos,str);
 		USART_Putstr(str);
 		USART_Putstr(" ");
-		    USART_itoa(horizontalpos,str);
+		    USART_itoa(adc,str);
 		USART_Putstr(str);
     USART_Putstr("\n");
 
 		
-		playfield[0][verticalpos] = 0x00;
-		playfield[0][0] = (3<<adc);
-		moveDot(&vdir,&hdir,&verticalpos,&horizontalpos);
-		
-		playfield[0][verticalpos] = (1<<horizontalpos);
 		
 		
-			for(i=1;i<=MAX_DIGITS;i++)
+		
+		for(i=1;i<=MAX_DIGITS;i++)
 			{
 					write_frame(i, playfield[0][i-1]);
 			}
 		
-		Delay(300);
+		Delay(30);
 	
   }
 }
@@ -355,73 +414,7 @@ max_init();
 
 
 
-void moveDot(vdirection *vdir,hdirection *hdir,uint8_t *ver,uint8_t *hor)
-{
-	if(*ver> 8)
-	{
-		*vdir = down;
-	}
-	if(*ver< 1)
-	{
-		*vdir = up;
-	}
-	if(*hor>=7)
-	{
-		*hdir = right;
-	}
-	if(*hor< 1)
-	{
-		*hdir = left;
-	}
-	if(*hdir)
-	{
-		*hor = *hor-1;
-	}else
-	{
-		*hor = *hor+1;
-	}
-	if(*vdir)
-	{
-		*ver = *ver-1;
-	}else
-	{
-		*ver = *ver+1;
-	}
-}
 
-void write_matrix (uint8_t byte)
-{
-	int i;
-
-	for (i=1;i<=MAX_DIGITS;i++)
-	{
-		GPIO_ResetBits(GPIOA, CLK_PIN); 						// pull the clock pin low
-		
-		GPIO_WriteBit (GPIOA, DIN_PIN, byte&0x80);  // write the MSB bit to the data pin
-		byte = byte<<1;  														// shift left
-		
-		GPIO_SetBits(GPIOA, CLK_PIN); 							// pull the clock pin HIGH
-	}
-}
-
-void write_frame (uint8_t address, uint8_t data)
-{
-	GPIO_ResetBits(GPIOA, CS_PIN); // pull the CS pin LOW
-	
-	write_matrix (address);
-	write_matrix (data); 
-	
-	GPIO_SetBits(GPIOA, CS_PIN); // pull the CS pin HIGH
-}
-
-void max_init(void)
-{
- write_frame(0x09, 0x00);      
- write_frame(0x0a, 0x0f);       
- write_frame(0x0b, 0x07);         
- write_frame(0x0c, 0x01);       
- write_frame(0x0f, 0x00);       
-}
 
 void delay(const int d)
 {

@@ -37,6 +37,9 @@
 // ----------------------------------------------------------------------------
 volatile uint32_t DMA_EndOfTransfer = 0;
 extern uint16_t adc;
+extern uint8_t playfield[1][MAX_DIGITS];
+int i;
+uint8_t play = 1;
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -122,13 +125,50 @@ void DMA1_Channel1_IRQHandler(void)
 
 char str[10];
 
+	uint8_t verticalpos =5;
+	uint8_t horizontalpos=1;
+	hdirection hdir = left;
+	vdirection vdir = up;
+
 void TIM2_IRQHandler(void)
 {
-	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-  {		
+		if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)			
+		{
+			playfield[0][verticalpos] = 0x00;
+			playfield[0][0] = (3<<adc);
+			moveDot(&vdir,&hdir,&verticalpos,&horizontalpos);
+		
+			playfield[0][verticalpos] = (1<<horizontalpos);
+		
+			TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+		}
+		
+		
+}
+
+void TIM3_IRQHandler(void)
+{
+	if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
+	{		
 		adc = map(ADC_GetConversionValue(ADC1));
-		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 	}
+}
+
+void EXTI0_1_IRQHandler(void)
+{
+  if(EXTI_GetITStatus(EXTI_Line0) != RESET)
+  {
+
+		
+		STM_EVAL_LEDToggle(LED4);
+		
+		
+
+    
+    // clear pending bit
+    EXTI_ClearITPendingBit(EXTI_Line0);
+  }
 }
 
 /**

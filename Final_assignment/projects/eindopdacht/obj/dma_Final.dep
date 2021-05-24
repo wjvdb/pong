@@ -1,6 +1,6 @@
 Dependencies for Project 'dma', Target 'Final': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\src\main2.c)(0x60928F0D)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\main2.o --omf_browse .\obj\main2.crf --depend .\obj\main2.d)
+F (.\src\main2.c)(0x60ABAED2)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\main2.o --omf_browse .\obj\main2.crf --depend .\obj\main2.d)
 I (..\..\libraries\CMSIS\ST\STM32F0xx\Include\stm32f0xx.h)(0x60924A24)
 I (..\..\libraries\CMSIS\Include\core_cm0.h)(0x60924A24)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E9122)
@@ -30,9 +30,9 @@ I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_usart.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_wwdg.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_misc.h)(0x60924A24)
 I (..\..\utilities\STM32F0-Discovery\stm32f0_discovery.h)(0x60924A25)
-I (.\inc\helper.h)(0x60924A25)
-F (.\src\helper.c)(0x609267C7)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\helper.o --omf_browse .\obj\helper.crf --depend .\obj\helper.d)
-I (.\inc\helper.h)(0x60924A25)
+I (.\inc\helper.h)(0x60AB8C9C)
+F (.\src\helper.c)(0x60AB8C04)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\helper.o --omf_browse .\obj\helper.crf --depend .\obj\helper.d)
+I (.\inc\helper.h)(0x60AB8C9C)
 I (..\..\libraries\CMSIS\ST\STM32F0xx\Include\stm32f0xx.h)(0x60924A24)
 I (..\..\libraries\CMSIS\Include\core_cm0.h)(0x60924A24)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E9122)
@@ -61,7 +61,7 @@ I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_tim.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_usart.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_wwdg.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_misc.h)(0x60924A24)
-F (.\src\stm32f0xx_it.c)(0x609259D2)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\stm32f0xx_it.o --omf_browse .\obj\stm32f0xx_it.crf --depend .\obj\stm32f0xx_it.d)
+F (.\src\stm32f0xx_it.c)(0x60ABB247)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\stm32f0xx_it.o --omf_browse .\obj\stm32f0xx_it.crf --depend .\obj\stm32f0xx_it.d)
 I (.\inc\stm32f0xx_it.h)(0x60924A25)
 I (..\..\libraries\CMSIS\ST\STM32F0xx\Include\stm32f0xx.h)(0x60924A24)
 I (..\..\libraries\CMSIS\Include\core_cm0.h)(0x60924A24)
@@ -92,7 +92,7 @@ I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_usart.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_wwdg.h)(0x60924A25)
 I (..\..\libraries\STM32F0xx_StdPeriph_Driver\inc\stm32f0xx_misc.h)(0x60924A24)
 I (..\..\utilities\STM32F0-Discovery\STM32F0_discovery.h)(0x60924A25)
-I (.\inc\helper.h)(0x60924A25)
+I (.\inc\helper.h)(0x60AB8C9C)
 F (..\..\utilities\STM32F0-Discovery\stm32f0_discovery.c)(0x60924A25)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I .\inc -I ..\..\libraries\CMSIS\Include -I ..\..\libraries\CMSIS\ST\STM32F0xx\Include -I ..\..\libraries\STM32F0xx_StdPeriph_Driver\inc -I ..\..\utilities\STM32F0-Discovery-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Users\wimjan\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="533" -DSTM32F051x8 -DUSE_STDPERIPH_DRIVER -DSTM32F0XX-o .\obj\stm32f0_discovery.o --omf_browse .\obj\stm32f0_discovery.crf --depend .\obj\stm32f0_discovery.d)
 I (..\..\utilities\STM32F0-Discovery\stm32f0_discovery.h)(0x60924A25)
 I (..\..\libraries\CMSIS\ST\STM32F0xx\Include\stm32f0xx.h)(0x60924A24)
